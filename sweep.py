@@ -42,7 +42,6 @@ def sweep():
         for hyperparameter, value in config.items():
             temp_config[hyperparameter] = value
 
-        # Write the updated temporary lora.yaml file
         with open(temp_config_path, 'w') as file:
             yaml.dump(temp_config, file)
 
