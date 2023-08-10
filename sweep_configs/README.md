@@ -6,7 +6,7 @@ This directory contains 3 configuration files for each sweep:
 - "qlora_sweep.yaml" - QLoRA Sweep
 
 ### Default Training Configs
-This directory contains a subdirectory __default_training_args__ which contains the default training arguments for each fine-tuning method taken directly from axolotl:
+The subdirectory __default_training_args__ which contains the default training arguments for each fine-tuning method taken directly from axolotl:
 - "default_lora.yaml" - LoRA Default Training Arguments
 - "default_qlora.yaml" - QLoRA Default Training Arguments
 
