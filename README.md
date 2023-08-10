@@ -14,3 +14,13 @@ git clone https://github.com/OpenAccess-AI-Collective/axolotl
 pip3 install -e .
 pip3 install -U git+https://github.com/huggingface/peft.git
 ```
+## For contributors running sweeps and training
+### 1. Request access to the [AblateIt WandB Team](https://wandb.ai/ablateit)
+### 2. Log into wandb through the CLI
+    wandb login
+
+
+## Links
+- [Discord](https://discord.gg/HfNctSTJ)
+- [HuggingFace](https://huggingface.co/AblateIt)
+- [WandB](https://wandb.ai/ablateit)

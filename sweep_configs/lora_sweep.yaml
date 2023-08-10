@@ -1,0 +1,17 @@
+wandb_args:
+  name: lora
+#  early_terminate: # Uncomment to enable early termination once the two TODOs below are filled in
+#    max_iter: 10 #TODO: Fill in the number of max iterations
+#    s: 3 #TODO: Specify total number of brackets. The number of brackets corresponds to the number of times you log the metric you are optimizing.
+  method: grid #TODO: Select between grid, random and bayes
+  metric:
+    name: validation_loss #TODO: Change to name axolotl uses
+    goal: minimize
+
+  parameters: #TODO: Fill in the parameters you want to sweep over, everything else will be taken from default_training_args/default_qlora.yaml and base_training_configs/default_lora.yaml
+    # Examples:
+    lora_r:
+      values: [16, 32]
+    lora_alpha:
+      values: [8, 16]
+
