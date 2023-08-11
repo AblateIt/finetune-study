@@ -44,7 +44,7 @@ def sweep():
             file.write(sweep_id)
 
     def run_sweep():
-        wandb.init()
+        wandb.init(project=args.project)
         config = wandb.config
 
         with open(temp_config_path, 'r') as file:
