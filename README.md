@@ -1,5 +1,6 @@
-# Comparing QLora, Lora, and Full Fine-tuning 
-Comprehensive analysis of difference in performance of QLora, Lora, and Full Finetunes. 
+# Comparing QLora, Lora, and Full Fine-tuning
+Comprehensive analysis of difference in performance of QLora, Lora, and Full Finetunes.
+
 
 ## Installation
 ### 1. Install python 3.9

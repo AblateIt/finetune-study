@@ -4,6 +4,7 @@ import yaml
 import shutil
 from subprocess import call
 import os
+wandb.login()
 
 """
 Still in progress and not yet tested.
@@ -12,25 +13,35 @@ Still in progress and not yet tested.
 
 def get_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--sweep_id', type=str, default=None,
+                        help='Wandb sweep id for decentralized sweeping. If not provided, a new sweep will be created.')
+
     parser.add_argument('--sweep_config', help='Path to sweep config yaml file',
-                        type=str, default='sweep_configs/lora_sweep.yaml')
+                        type=str, default='configs/sweep_configs/qlora_sweep.yaml')
 
     parser.add_argument('--project', type=str, help='Wandb project name',
                         default='AblateIt-Sweeps')
 
     parser.add_argument('--default_training_args', type=str, help='Path to default training args yaml file',
-                        default='sweep_configs/default_training_args/default_lora.yaml')
+                        default='configs/default_training_configs/default_qlora.yaml')
 
     return parser.parse_args()
 
 
 def sweep():
     args = get_args()
-    sweep_config = yaml.safe_load(open(args.sweep_config))["wandb_args"]
-    sweep_id = wandb.sweep(sweep_config, project=args.project)
 
     temp_config_path = args.default_training_args.replace('.yaml', '_temp.yaml')
     shutil.copyfile(args.default_training_args, temp_config_path)
+
+    sweep_id = args.sweep_id
+
+    if not sweep_id:
+        sweep_config = yaml.safe_load(open(args.sweep_config))["wandb_args"]
+        sweep_id = wandb.sweep(sweep_config, project=args.project)
+        print(sweep_id)
+        with open("sweep_id.txt", "w") as file:
+            file.write(sweep_id)
 
     def run_sweep():
         wandb.init()
@@ -52,7 +63,6 @@ def sweep():
     # Run the sweep
     wandb.agent(sweep_id, run_sweep)
 
-    # Delete the temporary config file
     os.remove(temp_config_path)
 
 
