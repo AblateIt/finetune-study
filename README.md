@@ -12,7 +12,7 @@ git clone https://github.com/OpenAccess-AI-Collective/axolotl
 ```
 ### 4. Install dependencies
 ```
-pip3 install -e .
+pip3 install -e axolotl/.
 pip3 install -U git+https://github.com/huggingface/peft.git
 ```
 ## For contributors running sweeps and training
