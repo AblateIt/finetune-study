@@ -33,9 +33,9 @@ lora_target_modules:
 lora_target_linear: true
 lora_fan_in_fan_out:
 
-wandb_project:
+wandb_project: sweep-models
 wandb_watch:
-wandb_run_id: A100-test1
+wandb_run_id:
 wandb_log_model:
 
 gradient_accumulation_steps: 4
