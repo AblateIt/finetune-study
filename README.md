@@ -8,14 +8,6 @@ Comprehensive analysis of difference in performance of QLora, Lora, and Full Fin
 >https://pytorch.org/get-started/locally/
 <<<<<<< HEAD
 ### 3. Install axolotl and dependencies
-=======
-### 3. Install axolotl
-```
-git clone https://github.com/AblateIt/axolotl.git
-```
-### 4. Install dependencies
->>>>>>> e5331023bbbf80d8f1d8ee78f1e7a0fa9e54880f
-```
 git clone https://github.com/AblateIt/axolotl.git
 pip3 install -e axolotl/.
 pip3 install -U git+https://github.com/huggingface/peft.git
