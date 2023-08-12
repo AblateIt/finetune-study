@@ -51,7 +51,9 @@ def main():
 
     # Run the training command with the temporary config file
     # cmd = f"accelerate launch axolotl/scripts/finetune.py {temp_config_path}"
-    cmd = f"python test_run.py --training_args_path {temp_config_path}"
+    print("YAAAAY")
+    cmd = f"python finetune-study/test_run.py --training_args_path {temp_config_path}"
+    cmd("ls")
     call(cmd, shell=True)
 
 if __name__ == '__main__':

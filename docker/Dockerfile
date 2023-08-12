@@ -28,3 +28,7 @@ RUN cd axolotl && \
 
 # helper for huggingface-login cli
 RUN git config --global credential.helper store
+
+RUN git clone --depth=1 https://github.com/morganmcg1/finetune-study.git
+
+ENTRYPOINT [ "python", "finetune-study/test.py", "--default_training_args", "finetune-study/configs/default_training_configs/default_lora.yaml"]
