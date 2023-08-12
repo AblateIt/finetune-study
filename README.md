@@ -6,19 +6,18 @@ Comprehensive analysis of difference in performance of QLora, Lora, and Full Fin
 ### 1. Install python 3.9
 ### 2. Install pytorch stable:
 >https://pytorch.org/get-started/locally/
-### 3. Install axolotl
+### 3. Install axolotl and dependencies
 ```
-git clone https://github.com/OpenAccess-AI-Collective/axolotl
-```
-### 4. Install dependencies
-```
+git clone https://github.com/AblateIt/axolotl.git
 pip3 install -e axolotl/.
 pip3 install -U git+https://github.com/huggingface/peft.git
 ```
 ## For contributors running sweeps and training
-### 1. Request access to the [AblateIt WandB Team](https://wandb.ai/ablateit)
-### 2. Log into wandb through the CLI
+### 1. Request access to the AblateIt WandB and HuggingFace teams 
+### 2. Log into wandb and HuggingFace through the CLI
     wandb login
+    huggingface-cli login
+
 
 
 ## Links
