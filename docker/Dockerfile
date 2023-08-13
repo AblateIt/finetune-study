@@ -11,8 +11,10 @@ RUN apt-get update && \
 
 WORKDIR /workspace
 
-RUN pip3 install --force-reinstall "peft @ git+https://github.com/huggingface/peft.git@main"
-RUN git clone --depth=1 https://github.com/OpenAccess-AI-Collective/axolotl.git
+# RUN git clone --depth=1 https://github.com/OpenAccess-AI-Collective/axolotl.git
+# clone AblateIt axolotl fork
+RUN git clone --depth=1 https://github.com/AblateIt/axolotl.git 
+
 # If AXOLOTL_EXTRAS is set, append it in brackets
 RUN cd axolotl && \
     if [ "$AXOLOTL_EXTRAS" != "" ] ; then \
@@ -20,6 +22,10 @@ RUN cd axolotl && \
     else \
         pip install -e .; \
     fi
+
+RUN pip3 install --force-reinstall "peft @ git+https://github.com/huggingface/peft.git@main"
+
+RUN git clone --depth=1 https://github.com/morganmcg1/finetune-study.git
 
 # fix so that git fetch/pull from remote works
 RUN cd axolotl && \
@@ -29,6 +35,7 @@ RUN cd axolotl && \
 # helper for huggingface-login cli
 RUN git config --global credential.helper store
 
-RUN git clone --depth=1 https://github.com/morganmcg1/finetune-study.git
+# RUN pip3 install nvidia-ml-py
+# RUN pip install nvidia-ml-py
 
-ENTRYPOINT [ "python", "finetune-study/test.py", "--default_training_args", "finetune-study/configs/default_training_configs/default_lora.yaml"]
+# ENTRYPOINT [ "python", "finetune-study/test.py", "--default_training_args", "finetune-study/configs/default_training_configs/default_lora.yaml"]

@@ -72,6 +72,7 @@ def get_git_commit_sha(git_dir=None):
     return sha
 
 from pynvml import *
+
 def get_nvidia_details():
     nvidia_details = {}
     nvmlInit()
@@ -84,7 +85,7 @@ def get_nvidia_details():
         gpus_ls.append(nvmlDeviceGetName(handle))
 
     nvidia_details["nvidia_driver_version"] = nvmlSystemGetDriverVersion()
-    nvidia_details["num_gpus_on_machine"] = deviceCount
+    nvidia_details["gpu_count"] = deviceCount
     nvidia_details["gpus"] = gpus_ls
     return nvidia_details
 
@@ -94,7 +95,7 @@ def main():
     temp_config_path = args.default_training_args.replace('.yaml', '_temp.yaml')
     shutil.copyfile(args.default_training_args, temp_config_path)
 
-    nvidia_details = get_nvidia_details()
+    # nvidia_details = get_nvidia_details()
     print(nvidia_details)
     wandb.init()
     config = wandb.config
