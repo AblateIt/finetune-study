@@ -113,7 +113,8 @@ def main():
         yaml.dump(temp_config, file)
 
     # Update the wandb config with the yaml config
-    wandb.config.update({**temp_config, **nvidia_details})
+    # wandb.config.update({**temp_config, **nvidia_details})
+    wandb.config.update(temp_config)
 
     # log the artifact file
     art = wandb.Artifact(name=f'my-config', type='run_config')
