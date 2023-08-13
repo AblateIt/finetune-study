@@ -96,14 +96,7 @@ def main():
 
     nvidia_details = get_nvidia_details()
     print(nvidia_details)
-    wandb.init(config={
-        # "axolotl_git_commit_sha": get_git_commit_sha("axolotl"),
-        # "finetune-study_git_commit_sha": get_git_commit_sha("finetune-study"),
-        "cuda_version": get_cuda_version(),
-        "nvidia_driver_version": nvidia_details["nvidia_driver_version"],
-        "gpu_count": nvidia_details["num_gpus_on_machine"],
-        "gpus": nvidia_details["gpus"]
-    })
+    wandb.init()
     config = wandb.config
 
     run_name = create_name(config)
@@ -117,6 +110,9 @@ def main():
 
     with open(temp_config_path, 'w') as file:
         yaml.dump(temp_config, file)
+
+    # Update the wandb config with the yaml config
+    wandb.config.update({**temp_config, **nvidia_details})
 
     # log the artifact file
     art = wandb.Artifact(name=f'my-config', type='run_config')
