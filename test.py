@@ -127,7 +127,7 @@ def main():
     # Run the training command with the temporary config file
     cuda_device_declaration = "CUDA_VISIBLE_DEVICES=" + ",".join(
         [str(x) for x in args.CUDA_device_ids]) + " " if args.CUDA_device_ids else ""
-    cmd = "python " + cuda_device_declaration + f" accelerate launch axolotl/scripts/finetune.py {temp_config_path}"
+    cmd = cuda_device_declaration + f" accelerate launch axolotl/scripts/finetune.py {temp_config_path}"
     # cmd = f"python finetune-study/test_run.py --training_args_path {temp_config_path}"
     # call(cmd, shell=True)
     run(cmd, shell=True)
