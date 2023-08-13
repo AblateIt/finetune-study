@@ -96,7 +96,7 @@ def main():
     shutil.copyfile(args.default_training_args, temp_config_path)
 
     # nvidia_details = get_nvidia_details()
-    print(nvidia_details)
+
     wandb.init()
     config = wandb.config
 
