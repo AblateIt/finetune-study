@@ -2,7 +2,7 @@ import wandb
 import argparse
 import yaml
 import shutil
-from subprocess import call
+from subprocess import call, run
 import os
 
 # wandb.login()
@@ -127,9 +127,10 @@ def main():
     # Run the training command with the temporary config file
     cuda_device_declaration = "CUDA_VISIBLE_DEVICES=" + ",".join(
         [str(x) for x in args.CUDA_device_ids]) + " " if args.CUDA_device_ids else ""
-    cmd = cuda_device_declaration + f"accelerate launch axolotl/scripts/finetune.py {temp_config_path}"
+    cmd = "python " + cuda_device_declaration + f" accelerate launch axolotl/scripts/finetune.py {temp_config_path}"
     # cmd = f"python finetune-study/test_run.py --training_args_path {temp_config_path}"
-    call(cmd, shell=True)
+    # call(cmd, shell=True)
+    run(cmd, shell=True)
 
 if __name__ == '__main__':
     main()
