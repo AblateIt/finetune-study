@@ -29,6 +29,9 @@ def get_args():
     parser.add_argument('--default_training_args', type=str, help='Path to default training args yaml file',
                         default='configs/default_training_configs/default_qlora.yaml')
 
+    parser.add_argument('--CUDA_device_ids', type=list, default=None,
+                        help='List of CUDA device ids to use for training. If not provided, all available GPUs will be used.')
+
     return parser.parse_args()
 
 def create_name(config_dict):
@@ -79,7 +82,8 @@ def get_nvidia_details():
         handle = nvmlDeviceGetHandleByIndex(i)
         # print(f"Device {i} : {nvmlDeviceGetName(handle)}")
         gpus_ls.append(nvmlDeviceGetName(handle))
-    nvidia_details["nvidia_driver_version"]: nvmlSystemGetDriverVersion()
+
+    nvidia_details["nvidia_driver_version"] = nvmlSystemGetDriverVersion()
     nvidia_details["num_gpus_on_machine"] = deviceCount
     nvidia_details["gpus"] = gpus_ls
     return nvidia_details
@@ -91,12 +95,13 @@ def main():
     shutil.copyfile(args.default_training_args, temp_config_path)
 
     nvidia_details = get_nvidia_details()
+    print(nvidia_details)
     wandb.init(config={
-        "axolotl_git_commit_sha": get_git_commit_sha("axolotl"),
-        "finetune-study_git_commit_sha": get_git_commit_sha("finetune-study"),
+        # "axolotl_git_commit_sha": get_git_commit_sha("axolotl"),
+        # "finetune-study_git_commit_sha": get_git_commit_sha("finetune-study"),
         "cuda_version": get_cuda_version(),
         "nvidia_driver_version": nvidia_details["nvidia_driver_version"],
-        "num_gpus_on_machine": nvidia_details["num_gpus_on_machine"],
+        "gpu_count": nvidia_details["num_gpus_on_machine"],
         "gpus": nvidia_details["gpus"]
     })
     config = wandb.config
@@ -114,7 +119,7 @@ def main():
         yaml.dump(temp_config, file)
 
     # log the artifact file
-    art = wandb.Artifact(name=f'config-{run_name}', type='run_config')
+    art = wandb.Artifact(name=f'my-config', type='run_config')
     art.add_file(temp_config_path)
     wandb.log_artifact(art)
 
