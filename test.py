@@ -42,16 +42,66 @@ def create_name(config_dict):
         name += short.get(hyperparam, hyperparam) + str(value).replace('.', '_') + '-'
     return name[:-1]
 
+import subprocess
+import re
+
+def get_cuda_version():
+    try:
+        nvcc_version = subprocess.check_output(["nvcc", "--version"]).decode()
+        # Extract the version using regex
+        match = re.search(r"release (\d+\.\d+)", nvcc_version)
+        if match:
+            return match.group(1)
+        else:
+            return "No CUDA version found"
+    except subprocess.CalledProcessError:
+        return "Failed to run nvcc"
+    except FileNotFoundError:
+        return "nvcc not found"
+
+import subprocess
+
+def get_git_commit_sha(git_dir=None):
+    cmd = ["git", "rev-parse", "HEAD"]
+    if git_dir:
+        cmd.extend(["--git-dir", f"{git_dir}/.git"])
+    sha = subprocess.check_output(cmd).strip().decode("utf-8")
+    return sha
+
+from pynvml import *
+def get_nvidia_details():
+    nvidia_details = {}
+    nvmlInit()
+    # print(f"Driver Version: {nvmlSystemGetDriverVersion()}")
+    deviceCount = nvmlDeviceGetCount()
+    gpus_ls = []
+    for i in range(deviceCount):
+        handle = nvmlDeviceGetHandleByIndex(i)
+        # print(f"Device {i} : {nvmlDeviceGetName(handle)}")
+        gpus_ls.append(nvmlDeviceGetName(handle))
+    nvidia_details["nvidia_driver_version"]: nvmlSystemGetDriverVersion()
+    nvidia_details["num_gpus_on_machine"] = deviceCount
+    nvidia_details["gpus"] = gpus_ls
+    return nvidia_details
+
 def main():
     args = get_args()
 
     temp_config_path = args.default_training_args.replace('.yaml', '_temp.yaml')
     shutil.copyfile(args.default_training_args, temp_config_path)
 
-    wandb.init()
+    nvidia_details = get_nvidia_details()
+    wandb.init(config={
+        "axolotl_git_commit_sha": get_git_commit_sha("axolotl"),
+        "finetune-study_git_commit_sha": get_git_commit_sha("finetune-study"),
+        "cuda_version": get_cuda_version(),
+        "nvidia_driver_version": nvidia_details["nvidia_driver_version"],
+        "num_gpus_on_machine": nvidia_details["num_gpus_on_machine"],
+        "gpus": nvidia_details["gpus"]
+    })
     config = wandb.config
 
-    run_name = sweep_name + "-" + finetune_type + "-" + create_name(config)
+    run_name = create_name(config)
     wandb.run.name = run_name
 
     with open(temp_config_path, 'r') as file:
