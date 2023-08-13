@@ -31,6 +31,17 @@ def get_args():
 
     return parser.parse_args()
 
+def create_name(config_dict):
+    short = {
+        'gradient_accumulation_steps': 'graccsteps',
+        'learning_rate': 'lr',
+        'lora_r': 'lora_r'
+    }
+    name = ''
+    for hyperparam, value in config_dict.items():
+        name += short.get(hyperparam, hyperparam) + str(value).replace('.', '_') + '-'
+    return name[:-1]
+
 def main():
     args = get_args()
 
@@ -39,6 +50,9 @@ def main():
 
     wandb.init()
     config = wandb.config
+
+    run_name = sweep_name + "-" + finetune_type + "-" + create_name(config)
+    wandb.run.name = run_name
 
     with open(temp_config_path, 'r') as file:
         temp_config = yaml.safe_load(file)
@@ -49,9 +63,19 @@ def main():
     with open(temp_config_path, 'w') as file:
         yaml.dump(temp_config, file)
 
+    # log the artifact file
+    art = wandb.Artifact(name=f'config-{run_name}', type='run_config')
+    art.add_file(temp_config_path)
+    wandb.log_artifact(art)
+
     # Run the training command with the temporary config file
     # cmd = f"accelerate launch axolotl/scripts/finetune.py {temp_config_path}"
-    cmd = f"python finetune-study/test_run.py --training_args_path {temp_config_path}"
+
+    # Run the training command with the temporary config file
+    cuda_device_declaration = "CUDA_VISIBLE_DEVICES=" + ",".join(
+        [str(x) for x in args.CUDA_device_ids]) + " " if args.CUDA_device_ids else ""
+    cmd = cuda_device_declaration + f"accelerate launch axolotl/scripts/finetune.py {temp_config_path}"
+    # cmd = f"python finetune-study/test_run.py --training_args_path {temp_config_path}"
     call(cmd, shell=True)
 
 if __name__ == '__main__':
