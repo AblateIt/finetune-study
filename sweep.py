@@ -90,16 +90,16 @@ def sweep():
             temp_config["warmup_steps"] = int((DATASET_SIZES["Puffin"] * (1 - temp_config["val_set_size"] ) )\
                         / (temp_config["gradient_accumulation_steps"] * temp_config["micro_batch_size"]) * warmup_factor)
 
-        temp_config["wandb_project"] = args.project
-        temp_config["wandb_entity"] = args.entity
-        temp_config["wandb_run_name"] = run_name
-        temp_config["output_dir"] = temp_config["output_dir"] + '/' + run_name
-
         if args.push_to_hub:
             temp_config["hub_model_id"] = "AblateIt/" + run_name
             temp_config["push_to_hub"] = True
             temp_config["hub_strategy"] = "all_checkpoints"
             print(temp_config["hub_model_id"])
+
+        temp_config["wandb_project"] = "AblateIt-Sweeps"
+        temp_config["wandb_entity"] = args.entity
+        temp_config["wandb_run_name"] = run_name
+        temp_config["output_dir"] = temp_config["output_dir"] + '/' + run_name + '/'
 
         run_config_path = temp_config["output_dir"] + '/config.yaml'
 
@@ -112,11 +112,11 @@ def sweep():
         # Run the training command with the temporary config file
         cuda_device_declaration = "CUDA_VISIBLE_DEVICES=" + ",".join(
             [str(x) for x in args.CUDA_device_ids]) + " " if args.CUDA_device_ids else ""
-        cmd = cuda_device_declaration + f"accelerate launch axolotl/scripts/finetune.py {temp_config_path}"
+        cmd = cuda_device_declaration + f"accelerate launch axolotl/scripts/finetune.py {run_config_path}"
         call(cmd, shell=True)
 
     # Run the sweep
-    wandb.agent(sweep_id, run_sweep, project=args.project, entity=args.entity, count=1)
+    wandb.agent(sweep_id, run_sweep, project=args.project, entity=args.entity)
 
     os.remove(temp_config_path)
 

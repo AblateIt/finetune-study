@@ -1,20 +1,12 @@
 # Comparing QLora, Lora, and Full Fine-tuning
-Comprehensive analysis of difference in performance of QLora, Lora, and Full Finetunes.
+Comprehensive analysis of difference in performance of QLora, Lora, and Full Fine-tuning.
 
 
 ## Installation
 ### 1. Install python 3.9
 ### 2. Install pytorch stable:
 >https://pytorch.org/get-started/locally/
-<<<<<<< HEAD
 ### 3. Install axolotl and dependencies
-=======
-### 3. Install axolotl
-```
-git clone https://github.com/AblateIt/axolotl.git
-```
-### 4. Install dependencies
->>>>>>> e5331023bbbf80d8f1d8ee78f1e7a0fa9e54880f
 ```
 git clone https://github.com/AblateIt/axolotl.git
 pip3 install -e axolotl/.

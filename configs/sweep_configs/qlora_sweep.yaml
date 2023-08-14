@@ -1,10 +1,12 @@
 wandb_args:
-  name: sweep_1
+  name: sweep_test_2
   early_terminate:
-    min_iter: 10
+    type: hyperband
+    min_iter: 5
+    eta: 5
   method: grid
   metric:
-    name: train_loss
+    name: "eval/loss"
     goal: minimize
 
   parameters:

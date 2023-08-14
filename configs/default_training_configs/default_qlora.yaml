@@ -8,7 +8,7 @@ load_in_4bit: true
 strict: false
 
 datasets:
-  - path: LDJnr/Puffin
+  - path: AblateIt/Puffin
     type: sharegpt:chat
 dataset_prepared_path: last_run_prepared
 val_set_size: 0.05
@@ -44,7 +44,6 @@ gradient_accumulation_steps: 4
 micro_batch_size: 1
 num_epochs: 15
 optimizer: adamw_bnb_8bit
-lr_scheduler:
 learning_rate: 0.00002
 
 train_on_inputs: false
@@ -61,8 +60,6 @@ logging_steps: 1
 xformers_attention: true
 flash_attention:
 
-warmup_steps: 50 # calculate outside
-
 save_strategy: epochs
 eval_strategy: epochs
 eval_steps: 0.2
@@ -71,11 +68,6 @@ save_total_limit: 3
 load_best_model_at_end: true
 greater_is_better: false
 metric_for_best_model: eval_loss
-
-#push_to_hub: true
-#hub_strategy: all_checkpoints
-# hub_token:
-#hub_model_id:
 
 debug:
 deepspeed:
