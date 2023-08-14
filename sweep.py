@@ -56,9 +56,6 @@ def create_name(config_dict):
 def sweep():
     args = get_args()
 
-    temp_config_path = args.default_training_args.replace('.yaml', '_temp.yaml')
-    shutil.copyfile(args.default_training_args, temp_config_path)
-
     sweep_id = args.sweep_id
 
     if not sweep_id:
@@ -80,34 +77,34 @@ def sweep():
         run_name = sweep_name + "-" + finetune_type + "-" + create_name(config)
 
         wandb.run.name = run_name
-        with open(temp_config_path, 'r') as file:
-            temp_config = yaml.safe_load(file)
+        with open(args.default_training_args, 'r') as file:
+            run_config = yaml.safe_load(file)
 
         for hyperparameter, value in config.items():
-            temp_config[hyperparameter] = value
+            run_config[hyperparameter] = value
 
         if warmup_factor:
-            temp_config["warmup_steps"] = int((DATASET_SIZES["Puffin"] * (1 - temp_config["val_set_size"] ) )\
-                        / (temp_config["gradient_accumulation_steps"] * temp_config["micro_batch_size"]) * warmup_factor)
+            run_config["warmup_steps"] = int((DATASET_SIZES["Puffin"] * (1 - run_config["val_set_size"] ) )\
+                        / (run_config["gradient_accumulation_steps"] * run_config["micro_batch_size"]) * warmup_factor)
 
         if args.push_to_hub:
-            temp_config["hub_model_id"] = "AblateIt/" + run_name
-            temp_config["push_to_hub"] = True
-            temp_config["hub_strategy"] = "all_checkpoints"
-            print(temp_config["hub_model_id"])
+            run_config["hub_model_id"] = "AblateIt/" + run_name
+            run_config["push_to_hub"] = True
+            run_config["hub_strategy"] = "all_checkpoints"
+            print(run_config["hub_model_id"])
 
-        temp_config["wandb_project"] = "AblateIt-Sweeps"
-        temp_config["wandb_entity"] = args.entity
-        temp_config["wandb_run_name"] = run_name
-        temp_config["output_dir"] = temp_config["output_dir"] + '/' + run_name + '/'
+        run_config["wandb_project"] = "AblateIt-Sweeps"
+        run_config["wandb_entity"] = args.entity
+        run_config["wandb_run_name"] = run_name
+        run_config["output_dir"] = run_config["output_dir"] + '/' + run_name + '/'
 
-        run_config_path = temp_config["output_dir"] + '/config.yaml'
+        run_config_path = run_config["output_dir"] + '/config.yaml'
 
-        if not os.path.exists(temp_config["output_dir"]):
-                    os.makedirs(temp_config["output_dir"])
+        if not os.path.exists(run_config["output_dir"]):
+                    os.makedirs(run_config["output_dir"])
 
         with open(run_config_path, 'w') as file:
-            yaml.dump(temp_config, file)
+            yaml.dump(run_config, file)
 
         # Run the training command with the temporary config file
         cuda_device_declaration = "CUDA_VISIBLE_DEVICES=" + ",".join(
@@ -117,8 +114,6 @@ def sweep():
 
     # Run the sweep
     wandb.agent(sweep_id, run_sweep, project=args.project, entity=args.entity)
-
-    os.remove(temp_config_path)
 
 
 
