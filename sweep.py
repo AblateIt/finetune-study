@@ -121,10 +121,6 @@ def sweep():
     os.remove(temp_config_path)
 
 
-"""
-Pushing at each epoch each config
-Save config file for each
-"""
 
 if __name__ == '__main__':
     sweep()
