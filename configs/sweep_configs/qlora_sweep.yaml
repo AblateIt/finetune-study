@@ -1,5 +1,5 @@
 wandb_args:
-  name: sweep_real_1
+  name: qlora_sweep_1
   early_terminate:
     type: hyperband
     min_iter: 5
@@ -15,5 +15,5 @@ wandb_args:
     gradient_accumulation_steps: { "values": [ 1, 4, 8, 16 ] }
     lora_dropout: { "values": [ 0, 0.1 ] }
     warmpup_steps_factor_of_epoch: {"value": 0.2}
-    sweep_name: { "value": "sweep_1" }
+    sweep_name: { "value": "qlora_sweep_1" }
     ft_type: { "value": "qlora" }

@@ -8,7 +8,7 @@ load_in_4bit: true
 strict: false
 
 datasets:
-  - path: AblateIt/Puffin
+  - path: LDJnr/Puffin
     type: sharegpt:chat
 dataset_prepared_path: last_run_prepared
 val_set_size: 0.05
@@ -18,7 +18,7 @@ adapter: qlora
 lora_model_dir:
 
 sequence_len: 4096
-max_packed_sequence_len: 4096
+max_packed_sequence_len:
 lora_r: 32
 lora_alpha: 16
 lora_dropout: 0.00
@@ -42,7 +42,7 @@ seed: 42
 
 gradient_accumulation_steps: 4
 micro_batch_size: 1
-num_epochs: 10
+num_epochs: 1
 optimizer: adamw_bnb_8bit
 learning_rate: 0.00002
 
@@ -64,7 +64,7 @@ save_strategy: epochs
 eval_strategy: epochs
 eval_steps: 0.2
 save_steps: 0.2
-save_total_limit: 3
+save_total_limit: 5
 load_best_model_at_end: true
 greater_is_better: false
 metric_for_best_model: eval_loss
