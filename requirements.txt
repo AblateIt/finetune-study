@@ -6,7 +6,6 @@ aiosignal==1.3.1
 appdirs==1.4.4
 async-timeout==4.0.3
 attrs==23.1.0
--e git+https://github.com/AblateIt/axolotl.git@fae6ed8092102d3b28d9ab492925c1d2647b2d2c#egg=axolotl
 bert-score==0.3.13
 bitsandbytes==0.41.1
 certifi==2023.7.22
@@ -46,17 +45,6 @@ mypy-extensions==1.0.0
 networkx==3.1
 nltk==3.8.1
 numpy==1.25.2
-nvidia-cublas-cu11==11.10.3.66
-nvidia-cuda-cupti-cu11==11.7.101
-nvidia-cuda-nvrtc-cu11==11.7.99
-nvidia-cuda-runtime-cu11==11.7.99
-nvidia-cudnn-cu11==8.5.0.96
-nvidia-cufft-cu11==10.9.0.58
-nvidia-curand-cu11==10.2.10.91
-nvidia-cusolver-cu11==11.4.0.1
-nvidia-cusparse-cu11==11.7.4.91
-nvidia-nccl-cu11==2.14.3
-nvidia-nvtx-cu11==11.7.91
 optimum==1.11.1
 packaging==23.1
 pandas==2.0.3
@@ -88,7 +76,6 @@ sympy==1.12
 termcolor==2.3.0
 threadpoolctl==3.2.0
 tokenizers==0.13.3
-torch==2.0.1
 tqdm==4.66.1
 transformers @ git+https://github.com/huggingface/transformers.git@fe3c8ab1af558b95f67f5fafc0c55f09fd2b09db
 triton==2.0.0

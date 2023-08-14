@@ -10,27 +10,54 @@ wandb.login()
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--sweep_id', type=str, default=None,
-                        help='Wandb sweep id for decentralized sweeping. If not provided, a new sweep will be created.')
+    parser.add_argument(
+        "--sweep_id",
+        type=str,
+        default=None,
+        help="Wandb sweep id for decentralized sweeping. If not provided, a new sweep will be created.",
+    )
 
-    parser.add_argument('--CUDA_device_ids', type=list, default=None,
-                        help='List of CUDA device ids to use for training. If not provided, all available GPUs will be used.')
+    parser.add_argument(
+        "--gpu",
+        type=list,
+        default=None,
+        help="List of CUDA device ids to use for training. If not provided, all available GPUs will be used.",
+    )
 
-    parser.add_argument('--sweep_config', type=str, default='configs/sweep_configs/qlora_sweep.yaml',
-                        help='Path to sweep config yaml file. Ignored if sweep_id is provided.')
+    parser.add_argument(
+        "--sweep_config",
+        type=str,
+        default="configs/sweep_configs/qlora_sweep.yaml",
+        help="Path to sweep config yaml file. Ignored if sweep_id is provided.",
+    )
 
-    parser.add_argument('--project', type=str, default='AblateIt-Sweeps',
-                        help='Wandb project name. Do not change.')
+    parser.add_argument(
+        "--project",
+        type=str,
+        default="AblateIt-Sweeps",
+        help="Wandb project name. Do not change.",
+    )
 
-    parser.add_argument('--default_training_args', type=str,
-                        default='configs/default_training_configs/default_qlora.yaml',
-                        help='Path to default training args yaml file. Ignored if sweep_id is provided.')
+    parser.add_argument(
+        "--default_training_args",
+        type=str,
+        default="configs/default_training_configs/default_qlora.yaml",
+        help="Path to default training args yaml file. Ignored if sweep_id is provided.",
+    )
 
-    parser.add_argument('--entity', type=str, default='ablateit',
-                        help='Wandb entity name. Do not change unless testing.')
+    parser.add_argument(
+        "--entity",
+        type=str,
+        default="ablateit",
+        help="Wandb entity name. Do not change unless testing.",
+    )
 
-    parser.add_argument('--push_to_hub', type=bool, default=True,
-                        help='Whether to push the models to the hub during training.')
+    parser.add_argument(
+        "--push_to_hub",
+        type=bool,
+        default=True,
+        help="Whether to push the models to the hub during training.",
+    )
 
     # parser.add_argument('--dataset', type=str, default='LDJnr/Puffin',
     #                     help='Dataset to use for training. Currently only supports Puffin.')
@@ -38,26 +65,24 @@ def get_args():
     return parser.parse_args()
 
 
-DATASET_SIZES = {"Puffin" : 3000}
+DATASET_SIZES = {"Puffin": 3000}
 
 
 def create_name(config_dict):
     short = {
-        'gradient_accumulation_steps': 'graccsteps',
-        'learning_rate': 'lr',
-        'lora_r': 'lora_r'
+        "gradient_accumulation_steps": "graccsteps",
+        "learning_rate": "lr",
+        "lora_r": "lora_r",
+        "lora_dropout": "drop",
     }
-    name = ''
+    name = ""
     for hyperparam, value in config_dict.items():
-        name += short.get(hyperparam, hyperparam) + str(value).replace('.', '_') + '-'
+        name += short.get(hyperparam, hyperparam) + str(value).replace(".", "_") + "-"
     return name[:-1]
 
 
 def sweep():
     args = get_args()
-
-    temp_config_path = args.default_training_args.replace('.yaml', '_temp.yaml')
-    shutil.copyfile(args.default_training_args, temp_config_path)
 
     sweep_id = args.sweep_id
 
@@ -72,59 +97,70 @@ def sweep():
         wandb.init(entity=args.entity)
         config = dict(wandb.config)
 
-        warmup_factor = config.pop(
-            "warmpup_steps_factor_of_epoch") if "warmpup_steps_factor_of_epoch" in config else None
+        warmup_factor = (
+            config.pop("warmpup_steps_factor_of_epoch")
+            if "warmpup_steps_factor_of_epoch" in config
+            else None
+        )
         finetune_type = config.pop("ft_type")
         sweep_name = config.pop("sweep_name")
 
         run_name = sweep_name + "-" + finetune_type + "-" + create_name(config)
 
         wandb.run.name = run_name
-        with open(temp_config_path, 'r') as file:
-            temp_config = yaml.safe_load(file)
+        with open(args.default_training_args, "r") as file:
+            run_config = yaml.safe_load(file)
 
         for hyperparameter, value in config.items():
-            temp_config[hyperparameter] = value
+            run_config[hyperparameter] = value
 
         if warmup_factor:
-            temp_config["warmup_steps"] = int((DATASET_SIZES["Puffin"] * (1 - temp_config["val_set_size"] ) )\
-                        / (temp_config["gradient_accumulation_steps"] * temp_config["micro_batch_size"]) * warmup_factor)
-
-        temp_config["wandb_project"] = args.project
-        temp_config["wandb_entity"] = args.entity
-        temp_config["wandb_run_name"] = run_name
-        temp_config["output_dir"] = temp_config["output_dir"] + '/' + run_name
+            run_config["warmup_steps"] = int(
+                (DATASET_SIZES["Puffin"] * (1 - run_config["val_set_size"]))
+                / (
+                    run_config["gradient_accumulation_steps"]
+                    * run_config["micro_batch_size"]
+                )
+                * warmup_factor
+            )
 
         if args.push_to_hub:
-            temp_config["hub_model_id"] = "AblateIt/" + run_name
-            temp_config["push_to_hub"] = True
-            temp_config["hub_strategy"] = "all_checkpoints"
-            print(temp_config["hub_model_id"])
+            run_config["hub_model_id"] = "AblateIt/" + run_name
+            run_config["push_to_hub"] = True
+            run_config["hub_strategy"] = "all_checkpoints"
+            print(run_config["hub_model_id"])
 
-        run_config_path = temp_config["output_dir"] + '/config.yaml'
+        run_config["wandb_project"] = args.project
+        run_config["wandb_entity"] = args.entity
+        run_config["wandb_run_name"] = run_name
+        run_config["output_dir"] = run_config["output_dir"] + "/" + run_name + "/"
 
-        if not os.path.exists(temp_config["output_dir"]):
-                    os.makedirs(temp_config["output_dir"])
+        run_config_path = run_config["output_dir"] + "config.yaml"
 
-        with open(run_config_path, 'w') as file:
-            yaml.dump(temp_config, file)
+        if not os.path.exists(run_config["output_dir"]):
+            os.makedirs(run_config["output_dir"])
+
+        with open(run_config_path, "w") as file:
+            yaml.dump(run_config, file)
+        print(run_config)
 
         # Run the training command with the temporary config file
-        cuda_device_declaration = "CUDA_VISIBLE_DEVICES=" + ",".join(
-            [str(x) for x in args.CUDA_device_ids]) + " " if args.CUDA_device_ids else ""
-        cmd = cuda_device_declaration + f"accelerate launch axolotl/scripts/finetune.py {temp_config_path}"
+        cuda_device_declaration = (
+            "export CUDA_VISIBLE_DEVICES=" + ",".join([str(x) for x in args.gpu]) + "; "
+            if args.gpu
+            else ""
+        )
+        cmd = (
+            cuda_device_declaration
+            + f"accelerate launch axolotl/scripts/finetune.py {run_config_path} --main_process_port 0"
+        )
+        print(cmd)
         call(cmd, shell=True)
 
-    # Run the sweep
-    wandb.agent(sweep_id, run_sweep, project=args.project, entity=args.entity, count=1)
+    if args.sweep_id is not None:
+        # Run the sweep
+        wandb.agent(sweep_id, run_sweep, project=args.project, entity=args.entity)
 
-    os.remove(temp_config_path)
 
-
-"""
-Pushing at each epoch each config
-Save config file for each
-"""
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     sweep()

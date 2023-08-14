@@ -1,3 +1,6 @@
 axolotl/
 *.arrow
 *wandb/
+*last_run_prepared/
+*qlora-out/
+*sweep_id.txt
