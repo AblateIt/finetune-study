@@ -25,6 +25,8 @@ RUN cd axolotl && \
 
 RUN pip3 install --force-reinstall "peft @ git+https://github.com/huggingface/peft.git@main"
 
+# RUN pip3 install flash-attn==2.0.7
+
 RUN git clone --depth=1 https://github.com/morganmcg1/finetune-study.git
 
 # fix so that git fetch/pull from remote works

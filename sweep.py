@@ -55,8 +55,7 @@ def get_args():
 
     parser.add_argument(
         "--push_to_hub",
-        type=bool,
-        default=True,
+        action='store_true',
         help="Whether to push the models to the hub during training.",
     )
 
@@ -156,14 +155,14 @@ def sweep():
 
     sweep_id = args.sweep_id
 
-    if not sweep_id:
+    if sweep_id is None:
         sweep_config = yaml.safe_load(open(args.sweep_config))["wandb_args"]
-        sweep_id = wandb.sweep(sweep_config, project=args.project)
+        sweep_id = wandb.sweep(sweep_config, entity=args.entity, project=args.project)
         print(sweep_id)
         with open("sweep_id.txt", "w") as file:
             file.write(sweep_id)
 
-    if args.sweep_id is not None:
+    if sweep_id is not None:
         # Run the sweep
         wandb.agent(sweep_id, partial(train, args), project=args.project, entity=args.entity)
     else:
