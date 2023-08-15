@@ -61,8 +61,8 @@ logging_steps: 1
 xformers_attention: true
 flash_attention:
 
-save_strategy: epochs
-eval_strategy: epochs
+save_strategy: epoch
+eval_strategy: epoch
 eval_steps: 0.2
 save_steps: 0.2
 save_total_limit: 5
