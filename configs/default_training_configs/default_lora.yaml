@@ -32,7 +32,7 @@ wandb_run_id:
 wandb_log_model:
 
 gradient_accumulation_steps: 4
-micro_batch_si  z e: 1
+micro_batch_size: 1
 num_epochs: 10
 optimizer: adamw_bnb_8bit
 lr_scheduler: constant_with_warmup
