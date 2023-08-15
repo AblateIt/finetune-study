@@ -28,7 +28,7 @@ There is a `requirements.txt` file in this repo, you might need to install some 
 For example to run QLora sweep, this command can be run
 `python sweep.py --sweep_config configs/sweep_configs/qlora_sweep.yaml --project test-qlora_sweep --default_training_args configs/default_training_configs/default_qlora.yaml`
 
-### How to Finetune configurations from a sweep.(you most likely will never do it)
+### How to Finetune configurations from a sweep.
 1. Check if you have a default acclerate config and if you have it then delete it. You can check your huggingface cache folder, by default it points to this `~/.cache/huggingface/accelerate/default_config.yaml`, if the `default_config.yaml` file exists then delete it.
 2. Test you code by running the command `CUDA_VISIBLE_DEVICES=0 accelerate launch axolotl/scripts/finetune.py configs/test/qlora_experiment.yaml --main_process_port 0`, this should run a qlora run on your GPU0. If not then please fix the error before running a sweep or else you will pull configurations from the sweep which will crash and no one else will be able to run them as well.
 
