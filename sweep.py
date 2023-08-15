@@ -114,18 +114,18 @@ def sweep():
         for hyperparameter, value in config.items():
             run_config[hyperparameter] = value
 
-        num_train_steps = int((DATASET_SIZES["Puffin"] *
+        epoch_train_steps = int((DATASET_SIZES["Puffin"] *
                                (1 - run_config["val_set_size"]))/ (run_config["gradient_accumulation_steps"] * run_config["micro_batch_size"]))
 
         if warmup_factor:
-            run_config["warmup_steps"] = int(num_train_steps * warmup_factor)
+            run_config["warmup_steps"] = int(epoch_train_steps * warmup_factor)
 
         if run_config["eval_strategy"] == "epoch" and type(run_config["eval_steps"]) == float:
-            run_config["eval_steps"] = int(num_train_steps * run_config["eval_steps"])
+            run_config["eval_steps"] = int(epoch_train_steps * run_config["eval_steps"])
             run_config["eval_strategy"] = "steps"
 
         if run_config["save_strategy"] == "epoch" and type(run_config["save_steps"]) == float:
-            run_config["save_steps"] = int(num_train_steps * run_config["save_steps"])
+            run_config["save_steps"] = int(epoch_train_steps * run_config["save_steps"])
             run_config["save_strategy"] = "steps"
 
         if args.push_to_hub:
