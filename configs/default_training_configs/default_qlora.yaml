@@ -45,6 +45,7 @@ micro_batch_size: 1
 num_epochs: 10
 optimizer: adamw_bnb_8bit
 learning_rate: 0.00002
+lr_scheduler: constant_with_warmup
 
 train_on_inputs: false
 group_by_length: false
@@ -57,11 +58,11 @@ early_stopping_patience: 5
 resume_from_checkpoint:
 local_rank:
 logging_steps: 1
-xformers_attention: true
-flash_attention:
+xformers_attention: false
+flash_attention: true
 
-save_strategy: epochs
-eval_strategy: epochs
+save_strategy: epoch
+eval_strategy: epoch
 eval_steps: 0.2
 save_steps: 0.2
 save_total_limit: 5
