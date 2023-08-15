@@ -58,13 +58,13 @@ early_stopping_patience: 5
 resume_from_checkpoint:
 local_rank:
 logging_steps: 1
-xformers_attention: true
-flash_attention:
+xformers_attention: false
+flash_attention: true
 
 save_strategy: epochs
 eval_strategy: epochs
-eval_steps: 0.2
-save_steps: 0.2
+eval_steps: 0.02
+save_steps: 0.02
 save_total_limit: 5
 load_best_model_at_end: true
 greater_is_better: false
