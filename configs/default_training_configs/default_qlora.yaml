@@ -58,8 +58,8 @@ early_stopping_patience: 5
 resume_from_checkpoint:
 local_rank:
 logging_steps: 1
-xformers_attention: true
-flash_attention:
+xformers_attention: false
+flash_attention: true
 
 save_strategy: epoch
 eval_strategy: epoch
