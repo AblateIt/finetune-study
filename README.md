@@ -7,7 +7,7 @@ Comprehensive analysis of difference in performance of QLora, Lora, and Full Fin
 ### 2. Install pytorch stable:
 >https://pytorch.org/get-started/locally/
 >
->If this step fails, either at install or gives an error when training, try simply `pip install torch`
+>If this step fails, either at install or gives an error when training, do `pip uninstall torch` and try simply `pip install torch`
 >
 ### 3. Install axolotl and dependencies
 ```
