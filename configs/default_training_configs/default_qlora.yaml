@@ -42,7 +42,7 @@ seed: 42
 
 gradient_accumulation_steps: 4
 micro_batch_size: 1
-num_epochs: 10
+num_epochs: 7
 optimizer: adamw_bnb_8bit
 learning_rate: 0.00002
 lr_scheduler: constant_with_warmup
