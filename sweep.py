@@ -105,7 +105,7 @@ def sweep():
         finetune_type = config.pop("ft_type")
         sweep_name = config.pop("sweep_name")
 
-        run_name = sweep_name + "-" + finetune_type + "-" + create_name(config)
+        run_name = args.project + "-" + sweep_name + "-" + finetune_type + "-" + create_name(config)
 
         wandb.run.name = run_name
         with open(args.default_training_args, "r") as file:
@@ -115,7 +115,7 @@ def sweep():
             run_config[hyperparameter] = value
 
         epoch_train_steps = int((DATASET_SIZES["Puffin"] *
-                               (1 - run_config["val_set_size"]))/ (run_config["gradient_accumulation_steps"] * run_config["micro_batch_size"]))
+                               (1 - run_config["val_set_size"])) / (run_config["gradient_accumulation_steps"] * run_config["micro_batch_size"]))
 
         if warmup_factor:
             run_config["warmup_steps"] = int(epoch_train_steps * warmup_factor)
