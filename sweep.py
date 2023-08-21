@@ -59,6 +59,13 @@ def get_args():
         help="Whether to push the models to the hub during training.",
     )
 
+    parser.add_argument(
+        "--max_num_runs",
+        type=int,
+        default=None,
+        help="Maximum number of runs for the agent to start.",
+    )
+
     # parser.add_argument('--dataset', type=str, default='LDJnr/Puffin',
     #                     help='Dataset to use for training. Currently only supports Puffin.')
 
@@ -163,7 +170,7 @@ def sweep():
 
     if args.sweep_id is not None:
         # Run the sweep
-        wandb.agent(sweep_id, run_sweep, project=args.project, entity=args.entity)
+        wandb.agent(sweep_id, run_sweep, project=args.project, entity=args.entity, count=args.max_num_runs)
 
 
 if __name__ == "__main__":
