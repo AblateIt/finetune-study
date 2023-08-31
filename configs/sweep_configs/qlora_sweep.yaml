@@ -2,7 +2,7 @@ wandb_args:
   name: qlora_puffin_sweep_4
   method: grid
   metric:
-    name: "eval/loss"
+    name: "eval/bench_total_accuracy"
     goal: minimize
 
   parameters:

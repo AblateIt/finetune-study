@@ -12,8 +12,8 @@ Comprehensive analysis of difference in performance of QLora, Lora, and Full Fin
 ### 3. Install axolotl and dependencies
 ```
 git clone https://github.com/AblateIt/axolotl.git
-pip3 install -e axolotl/.
-pip3 install -U git+https://github.com/huggingface/peft.git
+pip install -e axolotl/.
+pip install -U git+https://github.com/huggingface/peft.git
 ```
 There is a `requirements.txt` file in this repo, you might need to install some packages from this depending on what you are missing.
 

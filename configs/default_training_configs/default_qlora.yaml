@@ -10,8 +10,8 @@ strict: false
 datasets:
   - path: LDJnr/Puffin
     type: sharegpt:chat
-dataset_prepared_path: last_run_prepared
 val_set_size: 0.05
+dataset_prepared_path: last_run_prepared
 output_dir: ./qlora-out
 
 adapter: qlora
@@ -67,8 +67,11 @@ eval_steps: 0.2
 save_steps: 0.2
 save_total_limit: 5
 load_best_model_at_end: true
-greater_is_better: false
-metric_for_best_model: eval_loss
+
+bench_dataset: pharaouk/dharma-1/dharma_1_full.json
+do_bench_eval: true
+greater_is_better: true
+metric_for_best_model: eval_bench_total_accuracy
 
 debug:
 deepspeed:

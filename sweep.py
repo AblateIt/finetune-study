@@ -62,7 +62,7 @@ def get_args():
     parser.add_argument(
         "--max_num_runs",
         type=int,
-        default=None,
+        default=99999,
         help="Maximum number of runs for the agent to start.",
     )
 
