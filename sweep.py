@@ -72,7 +72,7 @@ def get_args():
     return parser.parse_args()
 
 
-DATASET_SIZES = {"Puffin": 3000}
+DATASET_SIZES = {"Puffin": 100}
 
 
 def create_name(config_dict):

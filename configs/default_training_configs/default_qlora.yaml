@@ -8,9 +8,9 @@ load_in_4bit: true
 strict: false
 
 datasets:
-  - path: LDJnr/Puffin
+  - path: AblateIt/Puffin-mini2
     type: sharegpt:chat
-val_set_size: 0.05
+val_set_size: 0.01
 dataset_prepared_path: last_run_prepared
 output_dir: ./qlora-out
 
@@ -68,7 +68,7 @@ save_steps: 0.2
 save_total_limit: 5
 load_best_model_at_end: true
 
-bench_dataset: pharaouk/dharma-1/dharma_1_full.json
+bench_dataset: pharaouk/dharma-1/dharma_1_mini.json
 do_bench_eval: true
 greater_is_better: true
 metric_for_best_model: eval_bench_total_accuracy
