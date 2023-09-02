@@ -14,24 +14,9 @@ val_set_size: 0.01
 dataset_prepared_path: last_run_prepared
 output_dir: ./qlora-out
 
-adapter: qlora
-lora_model_dir:
-
 sequence_len: 4096
 max_packed_sequence_len:
-lora_r: 32
-lora_alpha: 16
-lora_dropout: 0.00
-lora_target_modules:
-  - gate_proj
-  - down_proj
-  - up_proj
-  - q_proj
-  - v_proj
-  - k_proj
-  - o_proj
-lora_target_linear: true
-lora_fan_in_fan_out:
+
 
 wandb_project:
 wandb_watch:

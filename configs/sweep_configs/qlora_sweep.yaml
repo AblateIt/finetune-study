@@ -1,15 +1,15 @@
 wandb_args:
-  name: qlora_puffin_sweep_4
+  name: fullft
   method: grid
   metric:
     name: "eval/bench_total_accuracy"
     goal: minimize
 
   parameters:
-    lora_r: { "values": [ 8, 32, 64, 128 ] }
+#    lora_r: { "values": [ 8, 32, 64, 128 ] }
     learning_rate: { "values": [ 1e-4, 2e-5, 1e-6 ] }
     gradient_accumulation_steps: { "values": [ 1, 8, 16 ] }
-    lora_dropout: { "values": [ 0, 0.1 ] }
+#    lora_dropout: { "values": [ 0, 0.1 ] }
     warmpup_steps_factor_of_epoch: {"value": 0.2}
     sweep_name: { "value": "qlora_puffin_sweep_4" }
     ft_type: { "value": "qlora" }
