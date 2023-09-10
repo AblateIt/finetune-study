@@ -3,7 +3,7 @@ wandb_args:
   method: grid
   metric:
     name: "eval/bench_total_accuracy"
-    goal: minimize
+    goal: maximize
 
   parameters:
     lora_r: { "values": [ 8, 32, 64, 128 ] }
